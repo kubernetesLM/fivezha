@@ -1,2 +1,2 @@
 # fivezha
-Creating a new branch ie quick.
+Creating a new branch is quick & simple.
