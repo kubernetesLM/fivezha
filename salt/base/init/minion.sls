@@ -17,12 +17,6 @@ salt-minion:
   pkg.installed:
     - require:
       - pkg: epel-release
-  service.running:
-    - enable: True
-    - require:
-      - pkg: salt-minion
-    - watch:
-      - file: /etc/salt/minion
   file.managed:
     - name: /etc/salt/minion
     - source: salt://init/config/minion
@@ -31,3 +25,7 @@ salt-minion:
       minion_id: {{ grains['id'] }}
     - require:
       - pkg: salt-minion
+  service.running:
+    - enable: True
+    - watch:
+      - file: /etc/salt/minion
