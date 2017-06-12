@@ -9,14 +9,14 @@ users:
   hujf2:
     group: super
     gid: super
-    fullname: Huang ZhenXiong
+    fullname: Hu JianFeng2
     key: yourkey2
     comment: hujf2@email.com
     enc: ssh-dss
   hujf3:
     group: super
     gid: super
-    fullname: She AnBang
+    fullname: Hu JianFeng3
     key: yourkey3
     comment: hujf3@email.com
     enc: ssh-dss
