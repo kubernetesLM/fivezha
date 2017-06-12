@@ -1,3 +1,5 @@
+只上传了部分配置文件
+
 [root@master config]# pwd
 
 /srv/salt/base/init/config
