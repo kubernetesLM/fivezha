@@ -1,0 +1,13 @@
+/usr/local/nginx/logs/*.log {
+        #指定转储周期为每周
+        weekly
+        missingok
+        #指定日志文件删除之前转储的次数，0 指没有备份，5 指保留5 个备份
+        rotate 4
+        #compress
+        #delaycompress
+        sharedscripts
+        postrotate
+                [ -f /usr/local/nginx/logs/nginx.pid ] && kill -USR1 `cat /usr/local/nginx/logs/nginx.pid`
+        endscript
+}
