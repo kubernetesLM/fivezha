@@ -14,6 +14,7 @@ yum-list:
       - tcpdump
       - lsof
       - epel-release
+
 # 关闭不常用的服务
 service-disable:
   service.disabled:
@@ -21,38 +22,48 @@ service-disable:
 
 # 修改hostname
 hostname:
-  host.present:
-    - ip: {{ grains['fqdn_ip4'][0] }}
-    - name: {{ grains['id'] }}
-
   cmd.run:
     {% if grains['os'] == 'CentOS' and grains['osmajorrelease'] == '6' %}
-    - name: sed -i "s/^HOSTNAME=.*/HOSTNAME={{ grains['id'] }}/" /etc/sysconfig/network
+    - name: |
+        sed -i "s/^HOSTNAME=.*/HOSTNAME={{ grains['id'] }}/" /etc/sysconfig/network
+        hostname {{ grains['id'] }}
     - unless: grep "^HOSTNAME={{ grains['id'] }}$" /etc/sysconfig/network
     {% elif grains['os'] == 'CentOS' and grains['osmajorrelease'] == '7' %}
     - name: hostnamectl set-hostname {{ grains['id'] }}
     - unless: hostname | grep "^{{ grains['id'] }}$"
     {% endif %}
 
+# 修改hosts
+hosts:
+   cmd.run:
+      - name: sed -i "s/^127.0.0.1.*/127.0.0.1 {{ grains['id'] }} localhost/" /etc/hosts
+      - unless: grep "^127.0.0.1 {{ grains['id'] }} localhost$" /etc/hosts
+
 # 修改dns
-/etc/resolv.conf:
-  file.managed:
-    - source: salt://init/config/resolv.conf
+# 阿里云ecs不修改
+#/etc/resolv.conf:
+#  file.managed:
+#    - source: salt://init/config/resolv.conf
 
 # 添加crontab
-set-crontab:
-  cron.present:
-    - name: ntpdate cn.pool.ntp.org &> /dev/null
-    - user: root
-    - minute: 10
-    - hour: 0
-    - require:
-      - pkg: yum-list
+# 阿里云ecs不添加
+#set-crontab:
+#  cron.present:
+#    - name: ntpdate cn.pool.ntp.org &> /dev/null
+#    - user: root
+#    - minute: 10
+#    - hour: 0
+#    - require:
+#      - pkg: yum-list
     
 # 添加history时间格式
 /etc/profile:
   file.managed:
+    {% if grains['os'] == 'CentOS' and grains['osmajorrelease'] == '6' %}
     - source: salt://init/config/profile
+    {% elif grains['os'] == 'CentOS' and grains['osmajorrelease'] == '7' %}
+    - source: salt://init/config/profile-c7
+    {% endif %}
 
 # 添加命令审计
 /etc/profile.d/cmd_log.sh:
@@ -64,7 +75,11 @@ set-crontab:
 # 修改rsyslog
 /etc/rsyslog.conf:
   file.managed:
+    {% if grains['os'] == 'CentOS' and grains['osmajorrelease'] == '6' %}
     - source: salt://init/config/rsyslog.conf
+    {% elif grains['os'] == 'CentOS' and grains['osmajorrelease'] == '7' %}
+    - source: salt://init/config/rsyslog-c7.conf
+    {% endif %}
     - require:
       - file: /etc/profile.d/cmd_log.sh
   service.running:
@@ -104,7 +119,11 @@ ssh_key_root:
 # 关闭密码登录
 /etc/ssh/sshd_config:
   file.managed:
+    {% if grains['os'] == 'CentOS' and grains['osmajorrelease'] == '6' %}
     - source: salt://init/config/sshd_config
+    {% elif grains['os'] == 'CentOS' and grains['osmajorrelease'] == '7' %}
+    - source: salt://init/config/sshd_config-c7
+    {% endif %}
     - require:
       - ssh_auth: ssh_key_root
   service.running:

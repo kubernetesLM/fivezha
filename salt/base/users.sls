@@ -1,7 +1,7 @@
 # 添加群组admin sudo权限
 /etc/sudoers:
    file.managed:
-     - source: salt://init/config/sudoers
+     - source: salt://config/sudoers
 
 # 添加群组、用户
 {% for user,args in pillar['users'].items() %}
