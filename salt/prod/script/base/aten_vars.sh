@@ -1,6 +1,6 @@
 #!/bin/bash
 # PATH变量
-JAVA_HOME=/usr/java/jdk1.7.0_80
+JAVA_HOME=/usr/local/jdk1.8.0_112
 MYSQL_HOME=/usr/local/mysql
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:$JAVA_HOME/bin:$MYSQL_HOME/bin
 
