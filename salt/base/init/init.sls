@@ -14,7 +14,6 @@ yum-list:
       - tcpdump
       - lsof
       - epel-release
-
 # 关闭不常用的服务
 service-disable:
   service.disabled:
@@ -29,7 +28,7 @@ hostname:
         hostname {{ grains['id'] }}
     - unless: grep "^HOSTNAME={{ grains['id'] }}$" /etc/sysconfig/network
     {% elif grains['os'] == 'CentOS' and grains['osmajorrelease'] == '7' %}
-    - name: hostnamectl set-hostname {{ grains['id'] }}
+    - name: hostnamectl --static set-hostname {{ grains['id'] }}
     - unless: hostname | grep "^{{ grains['id'] }}$"
     {% endif %}
 

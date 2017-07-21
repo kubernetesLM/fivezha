@@ -1,8 +1,6 @@
-include:
-  - script.base
-web-sh:
+base-sh:
   file.recurse:
     - name: /data/script
-    - source: salt://script/web
+    - source: salt://script/base
     - file_mode: 755
     - onlyif: test -d /data/script

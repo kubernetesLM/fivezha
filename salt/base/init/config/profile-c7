@@ -25,10 +25,10 @@ pathmunge () {
 if [ -x /usr/bin/id ]; then
     if [ -z "$EUID" ]; then
         # ksh workaround
-        EUID=`id -u`
-        UID=`id -ru`
+        EUID=`/usr/bin/id -u`
+        UID=`/usr/bin/id -ru`
     fi
-    USER="`id -un`"
+    USER="`/usr/bin/id -un`"
     LOGNAME=$USER
     MAIL="/var/spool/mail/$USER"
 fi
@@ -57,7 +57,7 @@ export PATH USER LOGNAME MAIL HOSTNAME HISTSIZE HISTCONTROL
 # Current threshold for system reserved uid/gids is 200
 # You could check uidgid reservation validity in
 # /usr/share/doc/setup-*/uidgid file
-if [ $UID -gt 199 ] && [ "`id -gn`" = "`id -un`" ]; then
+if [ $UID -gt 199 ] && [ "`/usr/bin/id -gn`" = "`/usr/bin/id -un`" ]; then
     umask 002
 else
     umask 022
