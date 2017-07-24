@@ -10,7 +10,7 @@ mysql-install_pre:
         mv mysql-{{ version }}-linux-glibc2.5-x86_64 /usr/local/mysql
         groupadd -g 27 mysql
         useradd -r -u 27 -g 27 -s /sbin/nologin mysql
-    - unless: test -d /data/web/mysql
+    - unless: test -d /usr/local/mysql
 
 mysql-cnf:
   file.managed:

@@ -1,5 +1,5 @@
 include:
-  - script.bas
+  - script.base
 mysql-sh:
   file.recurse:
     - name: /data/script

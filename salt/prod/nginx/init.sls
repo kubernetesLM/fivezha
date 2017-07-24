@@ -11,10 +11,10 @@ nginx-install:
   cmd.run:
     - name: |
         cd /usr/local/src
-        tar zxvf nginx-{{ version }}.tar.gz
+        tar zxf nginx-{{ version }}.tar.gz
         cd nginx-{{ version }}
-        ./configure --with-http_ssl_module --with-http_realip_module --with-http_stub_status_module
-        make -j 2 && make install
+        ./configure --with-http_ssl_module --with-http_realip_module --with-http_stub_status_module > /dev/null
+        make -j 2 > /dev/null && make install > /dev/null
     - require:
       - pkg: nginx-install
     - unless: test -d /usr/local/nginx
