@@ -115,6 +115,22 @@ ssh_key_root:
     - user: root
     - source: salt://init/config/root.pub
 
+# 添加admin、super、tomcat群组sudo权限
+/etc/sudoers:
+   file.managed:
+     - source: salt://init/config/sudoers
+
+# 添加hujf密钥
+hujf:
+  group.present:
+    - name : admin
+    - require:
+      - file: /etc/sudoers
+  user.present:
+    - gid: admin
+  ssh_auth.present:
+    - source: salt://init/config/hujf.pub
+
 # 关闭密码登录
 /etc/ssh/sshd_config:
   file.managed:
@@ -124,7 +140,7 @@ ssh_key_root:
     - source: salt://init/config/sshd_config-c7
     {% endif %}
     - require:
-      - ssh_auth: ssh_key_root
+      - ssh_auth: ssh_key_hujf
   service.running:
     - name: sshd
     - reload: true
