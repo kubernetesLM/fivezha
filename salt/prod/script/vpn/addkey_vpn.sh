@@ -3,10 +3,10 @@
 # Description:创建和吊销openvpn证书
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 action=$1
-vpn1_ip=139.224.a.a
-vpn2_ip=139.224.b.b
+vpn_user=$2
+vpn_ip=139.224.a.a
+ovpn_file=/tmp/$vpn_user.ovpn
 expect_script=/data/script/vpn_expect
-local_ip=$(ifconfig eth1 | awk -F'[ :]+' 'NR==2{print $4}')
 
 usage(){
 	echo "Usage: $0 {build|revoke} username"
@@ -19,7 +19,7 @@ build_ovpn(){
 	client
 	dev tun
 	proto udp
-	remote $server_ip 1194
+	remote $vpn_ip 1194
 	resolv-retry infinite
 	nobind
 	persist-key
@@ -47,53 +47,46 @@ build_ovpn(){
 	echo "</tls-auth>" >> $ovpn_file
 }
 
+# 判断脚本参数个数
 [ "$#" -ne 2 ] && {
-	echo "Wrong number of argvs"
+	echo "Wrong number of argvs,it must be two."
 	usage
 }
 
-
-if [ "$local_ip" == "$vpn1_ip" ];then
-	server_ip=$vpn1_ip
-	vpn_user=$2
-	ovpn_file=/tmp/$vpn_user.ovpn
-elif [ "$local_ip" == "$vpn2_ip" ];then
-	server_ip=$vpn2_ip
-	vpn_user=${2}_2
-	ovpn_file=/tmp/$vpn_user.ovpn
-else
-	echo "Unknow vpn server ip"
+# 判断vpn_ip是否正确
+! ip -4 addr | grep -q "$vpn_ip" && {
+	echo "Ip:$vpn_ip not found on local machine."
 	exit 1
-fi
+}
 
 case $action in
 	build)
-		# 制作证书前检测环境
+		# 检测vpn环境
 		cd /usr/share/easy-rsa/2.0
-		source ./vars > /dev/null 2>&1
-		if [[ -f keys/$vpn_user.crt || -f keys/$vpn_user.key ]];then
+		source vars &> /dev/null
+		[[ -f keys/$vpn_user.crt || -f keys/$vpn_user.key ]] && {
 			echo "User $vpn_user already exist."
 			exit 1
-		fi
-		if [[ ! -f keys/ca.crt || ! -f keys/server.key || ! -f keys/dh2048.pem || ! -f keys/ta.key ]];then
+		}
+		[[ ! -f keys/ca.crt || ! -f keys/server.key || ! -f keys/dh2048.pem || ! -f keys/ta.key ]] && {
 			echo "File keys/ca.crt or keys/ta.key not found."
 			echo "Pls run ./build-ca and ./build-key-server server and ./build-dh and openvpn --genkey --secret keys/ta.key first."
 			exit 1
-		fi
+		}
 
 		# 检查是否已安装expect
 		rpm -q expect &> /dev/null || {
-			echo "Pls yum install expect first."
+			echo "Pls install expect first."
 			exit 1
 		}
 
-		if [ ! -f $expect_script ];then
-			echo "Script $expect_script not found."
+		[ ! -f $expect_script ] && {
+			echo "Script:$expect_script not found."
 			exit 1
-		fi
+		}
 		
 		# 开始制作证书
-		$expect_script $vpn_user > /dev/null 2>&1
+		$expect_script $vpn_user &> /dev/null
 		build_ovpn
 		echo "Build $vpn_user key success."
 		echo "Download the file $ovpn_file to your client computer"
@@ -101,7 +94,7 @@ case $action in
 	revoke)
 		# 吊销证书
 		cd /usr/share/easy-rsa/2.0
-		source ./vars > /dev/null 2>&1
+		source ./vars &> /dev/null
 		./revoke-full $vpn_user
 		\cp keys/crl.pem /etc/openvpn/
 		rm keys/$vpn_user* -f
