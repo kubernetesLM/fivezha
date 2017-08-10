@@ -1,6 +1,4 @@
-安装minion软件
-
-master配置好/etc/salt/roster后执行
+安装minion客户端，master配置好/etc/salt/roster后执行
 
 `salt-ssh -i \* state.sls minion`
 
