@@ -1,7 +1,3 @@
-base:
-  '*':
-    - init
-
 prod:
   '*web':
     - jdk
@@ -17,7 +13,7 @@ prod:
     - script.oracle
   '*db':
     - script.mysql
-  'HD2_yunpay_cc,HD2_yunpay_v2,HD2_yunpay_red,HD2_yunpay_static,HD2_yunpay_admin,HD2_yunpay_credit,HD2_yunpay_flow_recharge':
+  'HD2_yunpay_cc,HD2_yunpay_v2,HD2_yunpay_red,HD2_yunpay_static,HD2_yunpay_admin,HD2_yunpay_credit,HD2_yunpay_flow':
     - match: list
     - jdk
     - script.web
