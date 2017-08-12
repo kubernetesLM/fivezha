@@ -43,7 +43,7 @@ function start(){
 	[ -f $check_script ] && {
 		pid2=$(ps -ef | grep check_ | grep "$check_script" |grep -v grep |awk '{print $2}')
 		[ -z "$pid2" ] && {
-			cd ~
+			cd $project_dir
 			nohup $check_script &
 		}
 	}
@@ -135,23 +135,20 @@ function check_update_value(){
 	
 	# 下载update_file
 	[ -d $update_dir ] || mkdir -p $update_dir && cd $update_dir	
-	if [ -e $update_file ];then
-		http_code=$(curl -sI http://$ftp_ip:$port1/${project%%_*}/$update_file | awk 'NR==1{print $2}')
-		if [ $http_code -eq 200 ];then
-			wget -N http://$ftp_ip:$port1/${project%%_*}/$update_file
-			[ $? -ne 0 ] && {
-				echo_red "下载失败，请重试."
-				exit 1
-			}
-		else
-			echo "更新将使用本机文件：$update_dir/$update_file."
-		fi
-	else
-		wget -N http://$ftp_ip:$port1/${project%%_*}/$update_file
+	http_code=$(curl -sI http://$ftp_server:$port1/${project%%_*}/$update_file | awk 'NR==1{print $2}')
+	if [ $http_code -eq 200 ];then
+		wget -N http://$ftp_server:$port1/${project%%_*}/$update_file
 		[ $? -ne 0 ] && {
 			echo_red "下载失败，请重试."
 			exit 1
 		}
+	else
+		if [ -e $update_file ];then
+			echo "更新将使用本机文件：$update_dir/$update_file."
+		else
+			echo_red "请确保更新包已完整上传FTP服务器、或者已上传/data/update"
+			exit 1
+		fi
 	fi
 	
 	# 判断update_file压缩后的首目录名
@@ -235,8 +232,8 @@ function update(){
 		rm $project_data_dir/WEB-INF/lib -rf
 		mv $project_dir/webapps/$root_name/commons $project_data_dir/
 		mv $project_dir/webapps/$root_name/WEB-INF/lib $project_data_dir/WEB-INF/
-	# 项目云支付flow_recharge段落
-	elif [ "$project" == "yunpay_flow_recharge" ];then
+	# 项目云支付flow段落
+	elif [ "$project" == "yunpay_flow" ];then
 		rm $project_data_dir/plugins -rf
 		rm $project_data_dir/static -rf
 		rm $project_data_dir/uploadFiles -rf

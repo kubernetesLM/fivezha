@@ -12,7 +12,7 @@ project_data_dir=$web_dir/${update_file%.*}
 # 脚本用法
 function usage(){
 	echo_red "脚本用法：$0 project atcion"
-	echo "       project:{yffs|yfpw|yfqc|yffdc|yzyj|...}"
+	echo "       project:{yffs|yfpw|yfqc|yfdc|yzyj|...}"
 	echo "       action:{start|stop|restart|stauts}"
 	echo_red "普通更新用法：$0 project update update_file"
 	echo "       update_file:{yffs_20170110-001.zip|yffs_site_20170110-001.zip|...}"
@@ -87,6 +87,7 @@ function status(){
 function check_update_value(){
 	# 根据action值设定prefix_name
 	if [ "$action" == "update" ];then
+		# 唉
 		[ -d $project_data_dir ] && {
 			echo_red "$project_data_dir 版本已存在，不能更新"
 			exit 1
@@ -104,7 +105,7 @@ function check_update_value(){
 	}
 	
 	# 判断update_file日期版本号格式
-	[[ ! "$update_file" =~ [0-9]{8}-[0-9]{3} ]] && {
+	! [[ "$update_file" =~ [0-9]{8}-[0-9]{3} ]] && {
 		echo_red "$update_file 日期版本号出错，格式必须如下："
 		echo_red "20170303-001"
 		exit 1
@@ -119,9 +120,9 @@ function check_update_value(){
 	
 	# 下载update_file
 	[ -d $update_dir ] || mkdir -p $update_dir && cd $update_dir	
-	http_code=$(curl -sI http://$ftp_ip:$port1/${project%%_*}/$update_file | awk 'NR==1{print $2}')
+	http_code=$(curl -sI http://$ftp_server:$port1/${project%%_*}/$update_file | awk 'NR==1{print $2}')
 	if [ $http_code -eq 200 ];then
-		wget -N http://$ftp_ip:$port1/${project%%_*}/$update_file
+		wget -N http://$ftp_server:$port1/${project%%_*}/$update_file
 		[ $? -ne 0 ] && {
 			echo_red "下载失败，请重试."
 			exit 1
@@ -164,7 +165,7 @@ function update(){
 		\cp $project_dir/webapps/$root_name/WEB-INF/views/index.jsp $project_data_dir/WEB-INF/views/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/application.properties $project_data_dir/WEB-INF/classes/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/log4j.properties $project_data_dir/WEB-INF/classes/
-	# 项目云返服饰官网段落
+	# 项目云返服饰site段落
 	elif [ "$project" == "yffs_site" ];then
 		rm $project_data_dir/ueditor1_3_6 -rf
 		rm $project_data_dir/upload -rf
@@ -238,7 +239,7 @@ function update(){
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/log4j.properties $project_data_dir/WEB-INF/classes/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/redis.properties $project_data_dir/WEB-INF/classes/
 	# 项目云返房地产段落
-	elif [ "$project" == "yffdc" ];then
+	elif [ "$project" == "yfdc" ];then
 		rm $project_data_dir/WEB-INF/lib -rf
 		rm $project_data_dir/static/image -rf
 		rm $project_data_dir/ueditor -rf
@@ -248,17 +249,6 @@ function update(){
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/application.properties $project_data_dir/WEB-INF/classes/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/logback.xml $project_data_dir/WEB-INF/classes/
 	# 项目云返票务段落
-	elif [ "$project" == "yfpw.bak" ];then
-		rm $project_data_dir/WEB-INF/lib -rf
-		rm $project_data_dir/commons/images -rf
-		mv $project_dir/webapps/$root_name/WEB-INF/lib $project_data_dir/WEB-INF/
-		mv $project_dir/webapps/$root_name/commons/images $project_data_dir/commons/
-		\cp $project_dir/webapps/$root_name/WEB-INF/classes/jdbc.c3p0.properties $project_data_dir/WEB-INF/classes/
-		\cp $project_dir/webapps/$root_name/WEB-INF/classes/log4j.properties $project_data_dir/WEB-INF/classes/
-		\cp $project_dir/webapps/$root_name/WEB-INF/classes/redis.properties $project_data_dir/WEB-INF/classes/
-		\cp $project_dir/webapps/$root_name/WEB-INF/classes/yunpay-config.properties $project_data_dir/WEB-INF/classes/
-		\cp $project_dir/webapps/$root_name/WEB-INF/classes/zhizhuwang-config.properties $project_data_dir/WEB-INF/classes/
-		\cp $project_dir/webapps/$root_name/WEB-INF/classes/yataixin-config.properties $project_data_dir/WEB-INF/classes/
 	elif [ "$project" == "yfpw" ];then
 		rm $project_data_dir/WEB-INF/lib -rf
 		rm $project_data_dir/commons/images -rf
@@ -269,7 +259,7 @@ function update(){
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/log4j.properties $project_data_dir/WEB-INF/classes/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/redis.properties $project_data_dir/WEB-INF/classes/
 		\cp -a $project_dir/webapps/$root_name/WEB-INF/classes/third_config $project_data_dir/WEB-INF/classes/
-	# 项目云返票务后台段落
+	# 项目云返票务admin段落
 	elif [ "$project" == "yfpw_admin" ];then
 		rm $project_data_dir/plugins -rf
 		rm $project_data_dir/uploadFiles -rf
@@ -279,7 +269,7 @@ function update(){
 		mv $project_dir/webapps/$root_name/WEB-INF/lib $project_data_dir/WEB-INF/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/dbconfig.properties $project_data_dir/WEB-INF/classes/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/dbfh.properties $project_data_dir/WEB-INF/classes/
-	# 项目云返票务段落
+	# 项目云返票务service段落
 	elif [ "$project" == "yfpw_service" ];then
 		rm $project_data_dir/WEB-INF/lib -rf
 		rm $project_data_dir/WEB-INF/classes/third_config -rf
@@ -294,7 +284,7 @@ function update(){
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/jdbc.c3p0.properties $project_data_dir/WEB-INF/classes/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/log4j.properties $project_data_dir/WEB-INF/classes/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/redis.properties $project_data_dir/WEB-INF/classes/
-	# 项目云返酒店admin段落
+	# 项目云返酒店partner段落
 	elif [ "$project" == "yfjd_partner" ];then
 		rm $project_data_dir/WEB-INF/lib -rf
 		mv $project_dir/webapps/$root_name/WEB-INF/lib $project_data_dir/WEB-INF/
@@ -307,7 +297,7 @@ function update(){
 		mv $project_dir/webapps/$root_name/WEB-INF/lib $project_data_dir/WEB-INF/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/jdbc.c3p0.properties $project_data_dir/WEB-INF/classes/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/log4j.properties $project_data_dir/WEB-INF/classes/
-	# 项目云智硬件定时器段落
+	# 项目云智硬件job段落
 	elif [ "$project" == "yzyj_job" ];then
 		rm $project_data_dir/head -rf
 		rm $project_data_dir/WEB-INF/lib -rf
@@ -315,19 +305,25 @@ function update(){
 		mv $project_dir/webapps/$root_name/WEB-INF/lib $project_data_dir/WEB-INF/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/jdbc.c3p0.properties $project_data_dir/WEB-INF/classes/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/log4j.properties $project_data_dir/WEB-INF/classes/
-	# 项目云智pos段落
+	# 项目云智硬件pos段落
 	elif [ "$project" == "yzyj_pos" ];then
 		rm $project_data_dir/WEB-INF/lib -rf
 		mv $project_dir/webapps/$root_name/WEB-INF/lib $project_data_dir/WEB-INF/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/jdbc.c3p0.properties $project_data_dir/WEB-INF/classes/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/log4j.properties $project_data_dir/WEB-INF/classes/
-	# 项目云智mobile段落
+	# 项目云智硬件admin段落
+	elif [ "$project" == "yzyj_admin" ];then
+		rm $project_data_dir/WEB-INF/lib -rf
+		mv $project_dir/webapps/$root_name/WEB-INF/lib $project_data_dir/WEB-INF/
+		\cp $project_dir/webapps/$root_name/WEB-INF/classes/jdbc.c3p0.properties $project_data_dir/WEB-INF/classes/
+		\cp $project_dir/webapps/$root_name/WEB-INF/classes/log4j.properties $project_data_dir/WEB-INF/classes/
+	# 项目云智硬件mobile段落
 	elif [ "$project" == "yzyj_mobile" ];then
 		rm $project_data_dir/ueditor1_3_6 -rf
 		rm $project_data_dir/upload -rf
 		mv $project_dir/webapps/$root_name/ueditor1_3_6 $project_data_dir/
 		mv $project_dir/webapps/$root_name/upload $project_data_dir/
-	# 项目云返旅游site段落
+	# 项目云返旅游段落
 	elif [ "$project" == "yfly" ];then
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/jdbc.c3p0.properties $project_data_dir/WEB-INF/classes/
 	# 项目云返旅游site段落
@@ -336,21 +332,27 @@ function update(){
 		rm $project_data_dir/upload -rf
 		mv $project_dir/webapps/$root_name/ueditor1_3_6 $project_data_dir/
 		mv $project_dir/webapps/$root_name/upload $project_data_dir/
-	# 项目云返旅游site段落
+	# 项目云返旅游admin段落
 	elif [ "$project" == "yfly_admin" ];then
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/jdbc.c3p0.properties $project_data_dir/WEB-INF/classes/
-	# 项目云返旅游site段落
+	# 项目云返旅游job段落
 	elif [ "$project" == "yfly_job" ];then
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/jdbc.c3p0.properties $project_data_dir/WEB-INF/classes/
 	# 项目云商珠宝admin段落
 	elif [ "$project" == "yszb_admin" ];then
-		rm $project_data_dir/upload -rf
 		rm $project_data_dir/WEB-INF/lib -rf
-		mv $project_dir/webapps/$root_name/upload $project_data_dir/
 		mv $project_dir/webapps/$root_name/WEB-INF/lib $project_data_dir/WEB-INF/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/jdbc.c3p0.properties $project_data_dir/WEB-INF/classes/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/log4j.properties $project_data_dir/WEB-INF/classes/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/redis.properties $project_data_dir/WEB-INF/classes/
+	# 项目云返保险admin段落
+	elif [ "$project" == "yfbx_admin" ];then
+		rm $project_data_dir/ueditor1_3_6 -rf
+		mv $project_dir/webapps/$root_name/ueditor1_3_6 $project_data_dir/
+		\cp $project_dir/webapps/$root_name/WEB-INF/classes/jdbc.c3p0.properties $project_data_dir/WEB-INF/classes/
+	# 项目云返保险admin段落
+	elif [ "$project" == "yfbx_wecaht" ];then
+		\cp $project_dir/webapps/$root_name/WEB-INF/classes/jdbc.c3p0.properties $project_data_dir/WEB-INF/classes/
 	# 项目艾腾流量聚合段落
 	elif [ "$project" == "aten_flow" ];then
 		rm $project_data_dir/plugins -rf

@@ -26,8 +26,12 @@ mysql-install:
         /usr/local/mysql/scripts/mysql_install_db --user=mysql
         cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysqld
         chmod +x /etc/init.d/mysqld
-        #/etc/init.d/mysqld start
-        #/usr/local/mysql/bin/mysqladmin -uroot password
+        /etc/init.d/mysqld start
+        /usr/local/mysql/bin/mysql -e "delete from mysql.user"
+        /usr/local/mysql/bin/mysql -e "grant all on *.* to root@'%' identified by 'password' with grant option"
+        /usr/local/mysql/bin/mysql -e "drop database test"
+        /usr/local/mysql/bin/mysql -e "flush privileges"
         sed -i 's@^PATH.*@&:/usr/local/mysql/bin@' /root/.bash_profile
     - require:
       - file: mysql-cnf
+    - onlyif: test -d /data

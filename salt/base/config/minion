@@ -1,2 +1,2 @@
-master: 192.168.137.101
+master: {{ master_ip }}
 id: {{ minion_id }}

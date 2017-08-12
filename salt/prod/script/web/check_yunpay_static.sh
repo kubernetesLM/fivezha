@@ -5,7 +5,7 @@ source /data/script/aten_vars.sh
 project="yunpay_static"
 project_dir=$web_dir/tomcat_$project
 web_url=http://127.0.0.1:8081/$project/web/user/login
-#web_url=http://user.ipaye.cn/yunpay_static/web/user/login
+
 case_yunpay
 
 fail_ation(){

@@ -24,7 +24,7 @@ update_dir=/data/update
 script_dir=/data/script
 
 # 地址变量
-ftp_ip=ftp.atenops.com
+ftp_server=ftp.atenops.com
 port1=10080
 port2=10081
 
@@ -56,7 +56,7 @@ function case_yunpay(){
 			root_name="ROOT";;
 		yunpay_service)
 			root_name="ROOT";;
-		yunpay_flow_recharge)
+		yunpay_flow)
 			root_name="atflow";;
 		*)
 			echo_red "Undefine project";;
@@ -85,10 +85,8 @@ function case_project2(){
 			root_name="ROOT";;
 		yfqc_mobile)
 			root_name="ROOT";;
-		yffdc)
+		yfdc)
 			root_name="ROOT";;
-		yfpw.bak)
-			root_name="yunticket";;
 		yfpw)
 			root_name="ROOT";;
 		yfpw_admin)
@@ -113,26 +111,36 @@ function case_project2(){
 			root_name="yzjob";;
 		yzyj_mobile)
 			root_name="ROOT";;
-		yfjy_site)
-			root_name="yfjy_site";;
-		yfly_site)
-			root_name="ROOT";;
 		yfly)
+			root_name="ROOT";;
+		yfly_site)
 			root_name="ROOT";;
 		yfly_admin)
 			root_name="ROOT";;
 		yfly_job)
 			root_name="ROOT";;
-		yfbx_site)
-			root_name="yfbx_site";;
-		yfglfw_site)
-			root_name="yfglfw_site";;
 		yszb)
 			root_name="ROOT";;
 		yszb_site)
 			root_name="yszb_site";;
 		yszb_admin)
 			root_name="ROOT";;
+		yszb_job)
+			root_name="ROOT";;
+		yfbx_admin)
+			root_name="ROOT";;
+		yfbx_wechat)
+			root_name="ROOT";;
+		yfbx_site)
+			root_name="yfbx_site";;
+		jjg_app)
+			root_name="ROOT";;
+		jjg_admin)
+			root_name="ROOT";;
+		yfglfw_site)
+			root_name="yfglfw_site";;
+		yfjy_site)
+			root_name="yfjy_site";;
 		#艾腾项目
 		aten_repertory)
 			root_name="ROOT";;

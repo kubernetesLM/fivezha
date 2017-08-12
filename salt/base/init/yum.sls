@@ -15,8 +15,3 @@ yum-list:
       - lsof
       - epel-release
       - traceroute
-
-# 关闭不常用的服务
-service-disable:
-  service.disabled:
-    - name: postfix

@@ -1,12 +1,14 @@
 include:
-  - init.yum
-  - init.hostname
-  - init.hosts
-  - init.history
   - init.audit
 #  - init.dns
-#  - init.ntpdate
+  - init.history
+  - init.hostname
+  - init.hosts
   - init.limits
-  - init.sudo
-  - init.sshkey
+#  - init.ntpdate
+  - init.selinux
+  - init.service
   - init.sshd
+  - init.sshkey
+  - init.sudo
+  - init.yum

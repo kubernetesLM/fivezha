@@ -2,7 +2,7 @@
 ssh_key_root:
   ssh_auth.present:
     - user: root
-    - source: salt://sshkey/root.pub
+    - source: salt://init/sshkey/root.pub
 
 # 添加admin群组
 groupadd_admin:

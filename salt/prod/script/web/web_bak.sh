@@ -3,9 +3,11 @@
 source /data/script/aten_vars.sh
 
 projects="yunpay_v2 yunpay_cc yunpay_red yunpay_service yunpay_credit \
-yffs_site yffs_job yfqc_v2 yfqc_admin yfqc_site \
-yfpw yfpw_admin yfpw_service yfjd yfjd_admin yfjd_job \
-yzyj yzyj_pos yzyj_job"
+yfqc yfqc_v2 yfqc_admin \
+yfpw yfpw_admin yfpw_service \
+yfjd yfjd_admin \
+yzyj yzyj_pos \
+yfly yfly_admin"
 
 # 备份tomcat项目
 for project in $projects

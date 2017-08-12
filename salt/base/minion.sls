@@ -17,6 +17,7 @@ salt-minion:
     - source: salt://config/minion
     - template: jinja
     - defaults:
+      master_ip: {{ pillar['salt-master']['ip'] }}
       minion_id: {{ grains['id'] }}
     - require:
       - pkg: salt-minion

@@ -1,2 +1,0 @@
-master: 139.224.17.170
-id: {{ minion_id }}
