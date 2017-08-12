@@ -2,8 +2,8 @@
 /etc/profile.d/cmd_log.sh:
   file.managed:
     - source: salt://init/config/cmd_log.sh
-#    - require:
-#      - file: /etc/profile
+    - require:
+      - file: /etc/profile
 
 # 修改rsyslog
 /etc/rsyslog.conf1:
@@ -11,7 +11,6 @@
     - name: /etc/rsyslog.conf
     - pattern: '\*.info;mail.none;authpriv.none;cron.none                /var/log/messages'
     - repl: '*.info;mail.none;authpriv.none;cron.none;local1.none    /var/log/messages'
-    - unless: grep "local1.none" /etc/rsyslog.conf
     - require:
       - file: /etc/profile.d/cmd_log.sh
 
