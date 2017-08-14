@@ -1,5 +1,6 @@
 # 关闭不常用的服务
-{% set service = 'postfix' %}
+{% for service in 'postfix','NetworkManager' %}
 disable-{{ service }}:
   service.disabled:
     - name: {{ service }}
+{% endfor %}
