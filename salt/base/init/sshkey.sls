@@ -9,7 +9,7 @@ groupadd_admin:
   group.present:
     - name: admin
 
-# 添加suepr群组
+# 添加super群组
 groupadd_super:
   group.present:
     - name: super
@@ -19,18 +19,22 @@ ssh_key_hujf:
   user.present:
     - name: hujf
     - gid: admin
+    - require:
+      - group: groupadd_admin
   ssh_auth.present:
     - user: hujf
     - source: salt://init/sshkey/hujf.pub
     - require:
       - file: /etc/sudoers
 
-# 添加suepr成员密钥
+# 添加super成员密钥
 {% for user in 'huangzhx','sheab' %}
 ssh_key_{{ user }}:
   user.present:
     - name: {{ user }}
     - gid: super
+    - require:
+      - group: groupadd_super
   ssh_auth.present:
     - user: {{ user }}
     - source: salt://init/sshkey/{{ user }}.pub

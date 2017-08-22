@@ -28,6 +28,8 @@
     - name: rsyslog
     - watch:
       - file: /etc/rsyslog.conf2
+    - require:
+      - cmd: /etc/hosts
 
 # cmd.log日志轮询
 /etc/logrotate.d/cmd_log:

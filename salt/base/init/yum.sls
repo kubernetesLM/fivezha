@@ -15,3 +15,4 @@ yum-list:
       - lsof
       - epel-release
       - traceroute
+      - tree
