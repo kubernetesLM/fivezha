@@ -8,7 +8,7 @@ include:
 #  - init.ntpdate
   - init.selinux
   - init.service
-  - init.sshd
   - init.sshkey
+  - init.sshd
   - init.sudo
   - init.yum
