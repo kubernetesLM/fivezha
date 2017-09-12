@@ -59,10 +59,8 @@ getent group $group &> /dev/null || {
 
 # 检查用户是否已存在
 if id $user &> /dev/null;then
-	# 修改用户群组
 	usermod -G $group $user
 else
-	# 创建用户
 	useradd $user -g $group
 fi
 mkdir -p /home/$user/.ssh
