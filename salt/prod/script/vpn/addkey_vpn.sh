@@ -4,7 +4,7 @@
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 action=$1
 vpn_user=$2
-vpn_ip=139.224.a.a
+vpn_ip=139.224.229.170
 ovpn_file=/tmp/$vpn_user.ovpn
 expect_script=/data/script/vpn_expect
 

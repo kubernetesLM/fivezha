@@ -1,5 +1,5 @@
 # 修改hostname
-sed_hostname:
+/etc/sysconfig/network:
   cmd.run:
     {% if grains['os'] == 'CentOS' and grains['osmajorrelease'] == '6' %}
     - name: |

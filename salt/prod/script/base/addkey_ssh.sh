@@ -1,13 +1,11 @@
 #!/bin/bash
-# Dete:2016/06/27
-# Description:添加用户sshkey到.ssh/authorized_keys
+# Dete:2019/09/12
+# Description:添加用户公钥到~/.ssh/authorized_keys
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-unset User Group
 
-User="$1"
-Group="$2"
-Originalpwd=$(pwd)
-User_sshkey="${User}_sshkey"
+user="$1"
+group="$2"
+user_sshkey="${user}_sshkey"
 
 hujf_sshkey="ssh-dss AAAAB3NzaC1kc3MAAACBALfIEvxPxDgBtBx21QcXNt3+MZqJ1S3jTAyGvphKrd4o1qnEH8wTndsjucm2V8MW7utQqfhIAp8IOkDbmeFjrZz2AdUCnTcQCurcTQHk+o+Rwa4EpYioYvTSC1p7BSwS3tgLdCYEmst/MK96ycOWz09RzBmiyDokKMiM7wHa50pvAAAAFQCoVAzx827iSZQNM38jgqAD3Vv8PQAAAIEAosOvg72Ir4HxC7tzpchkvrXDBCrd7mlKFzWWSYb9nRbHPq6NmXnwo8073wcX8G3R3xTANttrbfeUQ2AnX9OJGhBJKk+dQxU7mg/q57nmz382CUZDht/cc+gpIjZuHVEdJrHS4ILIAaxCgsvEZa9hPj6B4tOC9kHUfTmgmXmPMJ0AAACAQqCmw5QH5FCiiQhzk1YfFH5AKljsE45IliyhwmbnQXaUCEvWTQ2d4o4TxlIoCoMTxj+HKDG7MKG2lQw4a1s2pIDGV8eGuVvJRRj/7T2uTx8jodZKH+qIlP8NUaQWrikgWcpLKWzmpsO+Ojqxb16vqIAKP0Z5WGdD8c2awvj6QX0="
 huangzhx_sshkey="ssh-dss AAAAB3NzaC1kc3MAAACBANItq6NKIvqOcb/NhQEfNEy6VXZ6kkdjYWDrZ/DLaV6WBAXMXoFe3HghJMBi1Jg1HQ9GqXQ7znFd6ZgXT7isuZ1mwvGBCZU2fgcrHR2ze1Q6fJ2tdTb004sG1Mo1Crw/E39eSYYnoT8g8gqmYDuEkc8xukLYocNHmJBnHeAqT3rlAAAAFQD1DF3O8uRBjmJJZ2eMnoZzQ5+44QAAAIAtlUx/qTrI0geWbi7BOE4/gvbysznhh1CKYyJqZvbWqKGbBe0kCKgfNzVFyokJno8cEQI0l3LwzvZRuxIC7WVQ0lQXdNRtw4mMcM4dcfqBu0V+rmoof1L5BIXgnAJh+r/f3YpXgzCoOO47aKxgFnGxP/lRiuJA3MOUpy8JgcHqlAAAAIAIErGbRZsUHM5p2VASOyS2VKWG4P80/3lWTCaXIdA+/dZRZX+J7vX0TcMdmDShFH1fTqAE2hPgDr45maZesI0pr2YR/coPmcCuPGtYjteM+dlk3n1ccYrFhegVvSfsdhqQEISgXagcz1IAiIReOB7oxmndiPVE1+lXnGSrhny6iA=="
@@ -25,56 +23,50 @@ lizhy_sshkey="ssh-dss AAAAB3NzaC1kc3MAAACBAPwh5xqtk4ea8MGOBgUT6re/5TF1guoi1qwXAp
 chengshj_sshkey="ssh-dss AAAAB3NzaC1kc3MAAACBAPu0tTZqrAOCG3kUs6nF1xIBEKZvl7YDHKc/36bgIb/SbIYEUtX6KW3JicL4XRPNM5Oo3z8N4GrjZpwy0T9zipa4X1fh+6M26eS/TJyAt2jCJEJcNPIDwTA3KSh1tKgnGcYK1Pd7EGGqZTvKPxHXD8x9IWeBcEJW4HcN2PJ2UwdvAAAAFQCeB5rFkXTKol4ZIqIn/84a9sxLzwAAAIEAkfpN4uMH1WyIk7DqZ66/OyVGrGuP816kUnjHAp/Gf+dzug5F2dkVELbGsgSCtfqPGuLAThYA5Pm3Hodekg+IPSdTWpqWIBrtj1O1bx5GQ5U9LC2u0HybWv2PuSPDjBKLf1BP4cyGXShbPlN2abOHkvmjA44A/fdxxZM2CFbi+D8AAACATcoRolajRnQzD7qtnNpfvxzS1RA410pwEHhqafvHvyi0SBN8MwlVwQU+oFosn9et5po98GLfgf6oGJte89qqviJcgpWmunI6bJ0mBVXEQPDAfabME2VHfvAqhncd+0ok3EkPrYFg43p4UdVst4GHCYRVICT9Cu3TqhqPs3KOkVQ="
 linjq_sshkey="ssh-dss AAAAB3NzaC1kc3MAAACBAPx/dIj+XIbTxPX1asMFN6zSGiTcyI1qCluf+OE0Rx8twMmLKCzqyNjoTgiN4VS0PIg1fKt3s45/cnRV6xld6j7lvQwCIRtALcl2k6OBaYxxn5swbbCGDUUWq8lPkjDpHEPC7IWYoijnfekBZaeucY5YdM70R6u02a0N0vO17F1BAAAAFQDItZY3CcvM80w6qalb+lcZPu29KwAAAIBd10wQop0ViX3QGDQorYQD5Jj1NEMsLa+RaHdn6UfG/hhlA9mvbsUoNm4vBUC9zMXjVZhKr+cC1pmd8TvFj8ncSx7tCubq+lLTsvkfzBPd4jecZRIET92oDgGU2dpADjbggisrbSff/mo0uBAOwqucZabP2tk01l76CyAMzgUQWAAAAIEA3+bF2rs3yQdX7yAjqJrSejKm37HDxojDCDP68hVsk296iVfv612nbeYH1nCCUp0VTC87WGN29xWHjEkHFnXeTEU07lT7B3Ue5ZehNrtaUtNHWYEDg/2zup4srgl5Axq7WZinqpezcoMNWPxhhu690m9nGEsWQt4DRYLwShqDVIc="
 chenyi_sshkey="ssh-dss AAAAB3NzaC1kc3MAAACBAIhKUOWO42EUZI+5ViHoy79lmp8Xz3zQDshJg/TRQW51bbYDp5FSWRY8mScqo5jzA50Lz7K4pN1D5WBg1qbHtxwmtQoWhTG0VPnCOeuqLVfrXjpm9lXYZyZ3esbPzfZZUaR7WsB0ZDF0b9InjgqCjOetBWBXS++8oB94Kw5aOfR9AAAAFQDkBsTOkDwEpyViySMlwRKBpa4DhwAAAIAKkJjAP04wRzV0LXWkLYw/d3slwbOS+EWbZx6Yg8ADUrbb46xpdgF1M1l02e9vZdYLk+bnjWfp2qZ57+qhxWtTLP6Xgd2kfh4Wr5DVNCPbE0++aiLRtupOF64HNxTjG+0wKMH50rEmhgsCJdgCqPiBxkBsO1W5daA/P9ubki6gOwAAAIBzY+Gx08LbZfzOOLdpq5FnQCwhfqdr1LESfwXYYvPNEQPNEd9d3yeB+ZSsFGXsvrmOlP8CLMiQ7+kEptgKjy8/KtNlEdQtzjlJZcldo7XFT8QyWVSlz65wEtxXpPakHx6oEwygr+ijFVAkcHXeuOuJaDLL4iH0PNaQl9kZAL/g1Q=="
+chenjx_sshkey="ssh-dss AAAAB3NzaC1kc3MAAACBAMtIhYArTUf37MfQ3stt09dY8nVvH9jprZ/xmvdIYAMe9NNDxiXDOdp+PLnWiLSGaZsl20tgTiq8HOxxB009PtJB+EMcRULSyOz78gWk6oYfUjyW9j7DkKPpyjG9At+ZdjFSpXxG3OYDkY6ZZOVbvkej2WkU8sEwzA5xymZyITXLAAAAFQDHFhFFTXkZ9EsS9gkCYnryzZeq1wAAAIEAki8zT2qTjyznqstAHtlmfZnDS86gBZxhHo/CDIB0QUY5KiChwoIv9JosaQ9qb9pv814u+2lzTfvebXUNEQy+H8pC/DZaMBXjKmjcOTPzAWTqF3lAyZ9aW8qXtuxnx7ud+NMlxWkRwT/Q4aPCJP6JZMspmiPA1qIgyNqf7i56Dq8AAACBAKuF4q3jaZrRAI6xKeUkl7wduZ6WIsp8k22wDQdCj3h4q7JM+wxMeuxoOe/lVpuWuOLwAwD5kuHqlalr27K9E4Sg0Tj3XSyN3/WLyV/TJpY9CslaKqvc66T3DDRvDrVDchqGUWvmijKRxIfaEC5WjSbaCEGAhpvWG/aTtQvW1w7a"
+linhy_sshkey="ssh-dss AAAAB3NzaC1kc3MAAACBAIPBzqB1bLoEoyjhHmsIGjsGB7z9Kq/KsTvx7pwpEcBo159qC9oMs/N/4tQWXDEV6l2STUqCY1jaxaMnmnxQrRIQs8ToTaTWyjNZc1+9LIKjErX4Kj9MgTentgPZoqcyiY9TCNwKOV92cTzioVACaZZYYo3vCu2T8cWURExtLOmVAAAAFQDN3PeHLJwJktbTBRYACVql98f73wAAAIAyvN/Oeie1J0pVI/ITXYs5GqqB2bLQCMF24lB2sEGQjwmMaf3V1J/7hROzFGcyfyCPh+73uRQO6vcI4TB6Pi/o6jPsR3ZdZzDp1llvg20QMNanOfD4tVRi3T2Jk6Zh7mDEBD8RTEUfh2Lh6gxdM84ikkBEdyxA6iHBsz5qAFbnvQAAAIAj8cqo0piYwXVDBK3Lyx6bz9H+PgiPJ7CPqX/aSXZTi1yZQLA9yaMqRikMlcjd1682XFeGmXpyjk5ajee/VQ+HFvKWvQjQkZhx0JxpOcAKmUzMvXc7Mo6knOTcjoT2TjQ+JZ2VncaZIfkGawrG/G9ZlIdSJEvyxkRfz7aIEACy8w=="
 
 # 判断脚本传参，打印脚本用法
-if [[ "$#" -ne 2 ]];then
+[[ "$#" -ne 2 ]] && {
 	echo "Wrong number of argvs"
-	echo "Usage: $0 {hujf|xiedh|yejq...} {admin|super|ftp|tomcat}"
+	echo "Usage: $0 {hujf|xiedh...} {admin|super|tomcat|ftp}"
 	exit 1
-fi
+}
 
 # 检查用户是否在上文的提供范围内
-if [[ -z ${!User_sshkey} ]];then
+[[ -z ${!user_sshkey} ]] && {
 	echo "Warning:Undefine user"
 	exit 1
-fi
+}
 
 # 限定group组只能为super|ftp|tomcat|admin
-if [[ "$Group" != "super" && "$Group" != "ftp" && "$Group" != "tomcat" && "$Group" != "admin" ]];then
+[[ ! "$group" =~ ^(admin|super|tomcat|ftp)$ ]] && {
 	echo "Warning:Undefine group"
 	exit 1
-fi
+}
 
 # 限制admin只能添加hujf
-if [[ "$Group" == "admin" ]];then
-	if [[ "$User" != "hujf" ]];then
-		echo "Warning:Only user of hujf can add in group of admin" 
-		exit 1
-	fi
-fi
+[[ "$group" == "admin" && "$user" != "hujf" ]] && {
+	echo "Warning:Only user of hujf can add in group of admin" 
+	exit 1
+}
 
 # 检查用户组是否已存在
-gid=$(grep "^$Group:" /etc/group | awk -F":" '{print $3}')
-if [[ -z "$gid" ]];then
-	echo "Warning:Group $Group does not exists on system"
+getent group $group &> /dev/null || {
+	echo "Warning:group $group does not exists on system"
 	exit 1
-fi
+}
 
 # 检查用户是否已存在
-uid=$(grep "^$User:" /etc/passwd | awk -F":" '{print $3}')
-if [[ -n "$uid" ]];then
-	usermod -G $Group $User
-	mkdir -p /home/$User/.ssh
-	chown $User:$Group /home/$User/.ssh
-	chmod 700 /home/$User/.ssh
-	echo "${!User_sshkey}" > /home/$User/.ssh/authorized_keys
-	echo "addkey $User sucess!"
+if id $user &> /dev/null;then
+	# 修改用户群组
+	usermod -G $group $user
 else
-	# 创建用户并添加sshkey
-	useradd $User -g $Group
-	mkdir -p /home/$User/.ssh
-	chown $User:$Group /home/$User/.ssh
-	chmod 700 /home/$User/.ssh
-	echo "${!User_sshkey}" > /home/$User/.ssh/authorized_keys
-	echo "addkey $User sucess!"
+	# 创建用户
+	useradd $user -g $group
 fi
+mkdir -p /home/$user/.ssh
+chown $user:$group /home/$user/.ssh
+chmod 700 /home/$user/.ssh
+echo "${!user_sshkey}" > /home/$user/.ssh/authorized_keys
+echo "addkey $user sucess!"

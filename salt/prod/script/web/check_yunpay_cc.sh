@@ -43,5 +43,5 @@ do
 		unset fail_count1
 		unset fail_count2
 	fi
-	sleep 15
+	sleep 30
 done

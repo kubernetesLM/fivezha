@@ -17,3 +17,6 @@ mysql_rsync:
     - daymonth: '*'
     - month: '*'
     - dayweek: '*'
+
+include:
+  - sshkey.backup

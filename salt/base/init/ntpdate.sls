@@ -1,4 +1,5 @@
 # 添加crontab
+# 阿里云ecs不添加
 ntpdate:
   cron.present:
     - name: ntpdate cn.pool.ntp.org &> /dev/null

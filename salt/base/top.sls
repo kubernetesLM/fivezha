@@ -12,7 +12,7 @@ prod:
   '*oracle':
     - script.oracle
     - cron.oracle
-  'E@.*db or HD2_yffs_oracle':
+  'E@.*db or HD2_yffs_oracle or HD2_yunpay_site':
     - match: compound
     - script.mysql
     - cron.mysql

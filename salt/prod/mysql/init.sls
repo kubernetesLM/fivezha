@@ -1,5 +1,5 @@
 {% set version = '5.6.30' %}
-mysql-install_pre:
+mysql-install:
   file.managed:
     - name: /usr/local/src/mysql-{{ version }}-linux-glibc2.5-x86_64.tar.gz
     - source: salt://soft/mysql-{{ version }}-linux-glibc2.5-x86_64.tar.gz
@@ -17,9 +17,9 @@ mysql-cnf:
     - name: /etc/my.cnf
     - source: salt://mysql/config/my.cnf
     - require:
-      - cmd: mysql-install_pre
+      - cmd: mysql-install
 
-mysql-install:
+mysql-install-post:
   cmd.run:
     - name: |
         cd /usr/local/mysql

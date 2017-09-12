@@ -17,3 +17,6 @@ web_rsync:
     - daymonth: '*'
     - month: '*'
     - dayweek: 7
+
+include:
+  - sshkey.backup

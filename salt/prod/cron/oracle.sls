@@ -7,7 +7,7 @@ oracle_bak:
     - daymonth: '*'
     - month: '*'
     - dayweek: '*'
-    - onlyif: id oracle
+
 oracle_rsync:
   cron.present:
     - name: /data/script/oracle_rsync.sh &> /dev/null
@@ -17,3 +17,6 @@ oracle_rsync:
     - daymonth: '*'
     - month: '*'
     - dayweek: '*'
+
+include:
+  - sshkey.backup

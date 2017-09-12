@@ -5,7 +5,7 @@ source /data/script/aten_vars.sh
 project="yunpay_v2"
 project_dir=$web_dir/tomcat_$project
 web_url=http://127.0.0.1:8084/$project/api/v2/user/login
-
+#web_url=http://user.ipaye.cn/yunpay_v2/api/v2/user/login
 case_yunpay
 
 fail_ation(){
@@ -37,6 +37,6 @@ do
 		fail_ation
 		unset fail_time
 	fi
-	sleep 15
+	sleep 30
 done
 

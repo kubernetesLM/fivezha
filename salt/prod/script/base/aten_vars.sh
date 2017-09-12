@@ -58,6 +58,8 @@ function case_yunpay(){
 			root_name="ROOT";;
 		yunpay_flow)
 			root_name="atflow";;
+		yunpay_flow_master)
+			root_name="atflow";;
 		*)
 			echo_red "Undefine project";;
 	esac
@@ -103,8 +105,12 @@ function case_project2(){
 			root_name="ROOT";;
 		yfjd_job)
 			root_name="ROOT";;
+		fcxt_app)
+			root_name="share";;
 		yzyj)
 			root_name="yzapp";;
+		yzyj_admin)
+			root_name="ROOT";;
 		yzyj_pos)
 			root_name="yzpos";;
 		yzyj_job)

@@ -299,9 +299,7 @@ function update(){
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/log4j.properties $project_data_dir/WEB-INF/classes/
 	# 项目云智硬件job段落
 	elif [ "$project" == "yzyj_job" ];then
-		rm $project_data_dir/head -rf
 		rm $project_data_dir/WEB-INF/lib -rf
-		mv $project_dir/webapps/$root_name/head $project_data_dir/
 		mv $project_dir/webapps/$root_name/WEB-INF/lib $project_data_dir/WEB-INF/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/jdbc.c3p0.properties $project_data_dir/WEB-INF/classes/
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/log4j.properties $project_data_dir/WEB-INF/classes/
@@ -353,6 +351,9 @@ function update(){
 	# 项目云返保险admin段落
 	elif [ "$project" == "yfbx_wecaht" ];then
 		\cp $project_dir/webapps/$root_name/WEB-INF/classes/jdbc.c3p0.properties $project_data_dir/WEB-INF/classes/
+	# 项目金纪官admin段落
+		elif [ "$project" == "jjg_app" ];then
+		\cp $project_dir/webapps/$root_name/WEB-INF/classes/application.properties $project_data_dir/WEB-INF/classes/
 	# 项目艾腾流量聚合段落
 	elif [ "$project" == "aten_flow" ];then
 		rm $project_data_dir/plugins -rf
